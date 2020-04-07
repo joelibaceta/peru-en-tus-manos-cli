@@ -29,12 +29,21 @@ def getLocationSummary():
     marks = response.json()
 
     for mark in marks:
-        ubigeo = str(mark['ubigeo']).zfill(6)
-        if ubigeo in marks_dic:
-            marks_dic[ubigeo] +=  1
+        ubigeo = ubigeo_dic[str(mark['ubigeo']).zfill(6)]
+
+        ubigeo_str = f"{ubigeo['name']} - {ubigeo['city']} ({ubigeo['state']})"
+
+        if ubigeo_str in marks_dic:
+            marks_dic[ubigeo_str] +=  1
         else:
-            marks_dic[ubigeo] = 0
+            marks_dic[ubigeo_str] = 1
     
+    sorted_dict = {k: marks_dic[k] for k in sorted(marks_dic, key=marks_dic.get, reverse = True)}
     
-getLocationSummary()
+    print("\n")
+    for k in sorted_dict: 
+        name, reference = k.split("-")
+        print(f"\t {str(sorted_dict[k]).rjust(8)} | {name.ljust(30)} | {reference}")
+    print("\n")
+
  
